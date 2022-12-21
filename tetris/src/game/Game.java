@@ -187,6 +187,7 @@ public class Game{
 		this.graphics.drawLine(300, 0, 300, 600);
 
 		this.field.render(this.graphics);
+		this.field.displayScore(this.graphics);
 		this.currentPiece.render(this.graphics);
 		this.nextPiece.render(this.graphics);
 		this.holdingPiece.render(this.graphics);

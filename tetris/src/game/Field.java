@@ -1,5 +1,4 @@
 package game;
-
 import piece.Piece;
 import piece.PieceShape;
 
@@ -61,7 +60,12 @@ public class Field {
 		// they are the same for every single other row
 		return this.field[0].length;
 	}
-
+	public void displayScore(Graphics g) {
+		Font font = new Font("Verdana", Font.BOLD, 14);
+		g.setFont(font);
+		g.setColor(Color.black);
+		g.drawString(new StringBuilder().append("SCORE: ").append(String.valueOf(my_score)).toString(),310,420);
+	}
 	public void render(Graphics g) {
 
 		for (int row = 0; row < field.length; row++) {
@@ -250,11 +254,10 @@ public class Field {
 	}
 	public void setScore()
 	{
-
 		my_score = my_score+10;
 		System.out.println(my_score);
-
 	}
+
 
 	public void shiftRows(int startingRow) {
 		for (int row = startingRow; row > 0; row--) {
