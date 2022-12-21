@@ -1,19 +1,19 @@
 package game;
 
-import java.util.Random;
-
 import piece.Piece;
 import piece.PieceShape;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Field {
 	private static final Color[] FIELD_COLORS = { Color.RED, Color.LIGHT_GRAY, Color.MAGENTA, Color.PINK, Color.GREEN,
 			Color.ORANGE, Color.CYAN };
-
 	private FieldSquare[][] field;
 	private Color[][] fieldColor;
 	private Random random;
+	public int my_score = 0;
+
 
 	public Field(int fieldHeight, int fieldWidth) {
 		this.random = new Random();
@@ -27,8 +27,10 @@ public class Field {
 		for (int row = 0; row < field.length; row++) {
 			for (int col = 0; col < field[0].length; col++) {
 				if (row > 8 && this.random.nextInt(11) <= 5) {
-					this.field[row][col] = FieldSquare.STACK;
-					this.fieldColor[row][col] = Field.FIELD_COLORS[this.random.nextInt(Field.FIELD_COLORS.length)];					
+					this.field[row][col] = FieldSquare.HOLD;
+					this.field[row][col] = FieldSquare.EMPTY;
+					/*this.field[row][col] = FieldSquare.STACK;*/
+					this.fieldColor[row][col] = Field.FIELD_COLORS[this.random.nextInt(Field.FIELD_COLORS.length)];
 				} else {
 					this.field[row][col] = FieldSquare.EMPTY;
 				}
@@ -61,6 +63,7 @@ public class Field {
 	}
 
 	public void render(Graphics g) {
+
 		for (int row = 0; row < field.length; row++) {
 			for (int col = 0; col < field[row].length; col++) {
 				if (this.field[row][col].equals(FieldSquare.EMPTY)) {
@@ -69,13 +72,17 @@ public class Field {
 				} else if (this.field[row][col].equals(FieldSquare.STACK)) {
 					g.setColor(this.fieldColor[row][col]);
 					g.fillRect(col * 30, row * 30, 30, 30);
-					g.setColor(Color.WHITE);				
+					g.setColor(Color.WHITE);
+					g.drawRect(col * 30, row * 30, 30, 30);}
+				else if (this.field[row][col].equals(FieldSquare.HOLD)) {
+					g.setColor(this.fieldColor[row][col]);
+					g.fillRect(col * 30, row * 30, 30, 30);
+					g.setColor(Color.BLACK);
 					g.drawRect(col * 30, row * 30, 30, 30);
-				}				
+				}
 			}
 		}
 	}
-
 	public boolean isPieceFallen(Piece piece) {
 		int pieceX = piece.getX();
 		int pieceY = piece.getY();
@@ -167,7 +174,6 @@ public class Field {
 				}
 			}
 		}
-
 		return false;
 	}
 
@@ -191,6 +197,22 @@ public class Field {
 		return false;
 	}
 
+	public void holdQueue(Piece piece){
+		int pieceX = piece.getX();
+		int pieceY = piece.getY();
+
+		PieceShape pieceShape = piece.getShape();
+		int pieceHeight = pieceShape.getHeight();
+		int pieceWidth = pieceShape.getWidth();
+
+		for (int row = 0; row < pieceHeight; row++) {
+			for (int col = 0; col < pieceWidth; col++) {
+				if (pieceShape.isPieceBrick(row, col)) {
+					this.field[pieceY + row][pieceX + col] = FieldSquare.HOLD;
+				}
+			}
+		}
+	}
 	public void placePiece(Piece piece) {
 		int pieceX = piece.getX();
 		int pieceY = piece.getY();
@@ -209,6 +231,7 @@ public class Field {
 		}
 	}
 
+
 	public void destroyFullRows() {
 		for (int row = 0; row < this.field.length; row++) {
 			boolean isFullRow = true;
@@ -221,8 +244,16 @@ public class Field {
 
 			if (isFullRow) {
 				this.shiftRows(row);
+				setScore();
 			}
 		}
+	}
+	public void setScore()
+	{
+
+		my_score = my_score+10;
+		System.out.println(my_score);
+
 	}
 
 	public void shiftRows(int startingRow) {

@@ -7,7 +7,7 @@ import java.awt.event.KeyListener;
 
 public class InputHandler implements KeyListener {
 	private Game game;
-		
+
 	public InputHandler(Display display, Game game) {
 		display.getCanvas().addKeyListener(this);
 		this.game = game;
@@ -29,8 +29,10 @@ public class InputHandler implements KeyListener {
 			System.exit(0);
 		} else if (keyCode == KeyEvent.VK_P) {
 			game.pause();
-		} else if (keyCode == KeyEvent.VK_S) {
+		} else if(keyCode == KeyEvent.VK_R){
 			game.resume();
+		} else if (keyCode == KeyEvent.VK_S) {
+			game.switchHoldingPiece();
 		}
 	}
 
