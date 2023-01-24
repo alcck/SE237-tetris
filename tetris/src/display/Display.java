@@ -66,6 +66,6 @@ public class Display extends Canvas {
 
 	// Creating a getter to access the Canvas object from other classes
 	public Canvas getCanvas() {
-		return this.canvas;
+		return this.canvas
 	}
 }
